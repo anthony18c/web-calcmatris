@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Matrices 3x3</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #b3e0f2, #a6e7a7);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 1px solid #3498db; /* Borde azul claro */
+            margin: 20px auto;
+        }
+
+        .matrix-input {
+            border: 1px solid #3498db; /* Borde azul claro para los campos de entrada */
+            padding: 5px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #3498db; /* Fondo azul claro para los botones */
+            border: 1px solid #3498db; /* Borde azul claro para los botones */
+            color: #fff; /* Texto blanco para los botones */
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #207ab8; /* Cambio de color al pasar el mouse */
+            transform: scale(1.05); /* Efecto de escala al pasar el mouse */
+        }
+
+        #result {
+            background-color: #fff;
+            border: 1px solid #3498db; /* Borde azul claro para el resultado */
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Matrices 3x3</h1>
+
+    <table>
+        <tr>
+            <td><input type="text" id="matrix-11" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-12" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-13" class="matrix-input" /></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="matrix-21" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-22" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-23" class="matrix-input" /></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="matrix-31" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-32" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-33" class="matrix-input" /></td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td><input type="text" id="matrix-b-11" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-b-12" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-b-13" class="matrix-input" /></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="matrix-b-21" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-b-22" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-b-23" class="matrix-input" /></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="matrix-b-31" class "matrix-input" /></td>
+            <td><input type="text" id="matrix-b-32" class="matrix-input" /></td>
+            <td><input type="text" id="matrix-b-33" class="matrix-input" /></td>
+        </tr>
+    </table>
+
+    <button onclick="calcularTranspuesta()">Calcular Transpuesta</button>
+    <button onclick="calcularDeterminante()">Calcular Determinante</button>
+    <button onclick="calcularInversa()">Calcular Inversa</button>
+    <button onclick="calcularSuma()">Calcular Suma</button>
+    <button onclick="calcularResta()">Calcular Resta</button>
+    <button onclick="calcularMultiplicacion()">Calcular Multiplicación</button>
+
+    <div id="result"></div>
+    
+    <script>
+        function getMatrix() {
+            return [
+                [parseFloat(document.getElementById('matrix-11').value), parseFloat(document.getElementById('matrix-12').value), parseFloat(document.getElementById('matrix-13').value)],
+                [parseFloat(document.getElementById('matrix-21').value), parseFloat(document.getElementById('matrix-22').value), parseFloat(document.getElementById('matrix-23').value)],
+                [parseFloat(document.getElementById('matrix-31').value), parseFloat(document.getElementById('matrix-32').value), parseFloat(document.getElementById('matrix-33').value)]
+            ];
+        }
+
+        function getMatrixB() {
+            return [
+                [parseFloat(document.getElementById('matrix-b-11').value), parseFloat(document.getElementById('matrix-b-12').value), parseFloat(document.getElementById('matrix-b-13').value)],
+                [parseFloat(document.getElementById('matrix-b-21').value), parseFloat(document.getElementById('matrix-b-22').value), parseFloat(document.getElementById('matrix-b-23').value)],
+                [parseFloat(document.getElementById('matrix-b-31').value), parseFloat(document.getElementById('matrix-b-32').value), parseFloat(document.getElementById('matrix-b-33').value)]
+            ];
+        }
+
+        function calcularTranspuesta() {
+            const matrix = getMatrix();
+            const transpuesta = [
+                [matrix[0][0], matrix[1][0], matrix[2][0]],
+                [matrix[0][1], matrix[1][1], matrix[2][1]],
+                [matrix[0][2], matrix[1][2], matrix[2][2]]
+            ];
+            document.getElementById('result').innerText = 'Transpuesta:\n' + transpuesta.map(row => row.join(' ')).join('\n');
+        }
+
+        function calcularDeterminante() {
+            const matrix = getMatrix();
+            const det = matrix[0][0] * matrix[1][1] * matrix[2][2] +
+                        matrix[0][1] * matrix[1][2] * matrix[2][0] +
+                        matrix[0][2] * matrix[1][0] * matrix[2][1] -
+                        matrix[0][2] * matrix[1][1] * matrix[2][0] -
+                        matrix[0][1] * matrix[1][0] * matrix[2][2] -
+                        matrix[0][0] * matrix[1][2] * matrix[2][1];
+            document.getElementById('result').innerText = 'Determinante: ' + det;
+            return det; // Devuelve el determinante
+        }
+
+        function calcularInversa() {
+            const matrix = getMatrix();
+            const det = calcularDeterminante();
+            if (det === 0) {
+                document.getElementById('result').innerText = 'La matriz no tiene inversa (determinante = 0)';
+            } else {
+                const adjunta = [
+                    [
+                        matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1],
+                        matrix[0][2] * matrix[2][1] - matrix[0][1] * matrix[2][2],
+                        matrix[0][1] * matrix[1][2] - matrix[0][2] * matrix[1][1]
+                    ],
+                    [
+                        matrix[1][2] * matrix[2][0] - matrix[1][0] * matrix[2][2],
+                        matrix[0][0] * matrix[2][2] - matrix[0][2] * matrix[2][0],
+                        matrix[0][2] * matrix[1][0] - matrix[0][0] * matrix[1][2]
+                    ],
+                    [
+                        matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0],
+                        matrix[0][1] * matrix[2][0] - matrix[0][0] * matrix[2][1],
+                        matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+                    ]
+                ];
+
+                const inversa = adjunta.map(row => row.map(val => val / det));
+                document.getElementById('result').innerText = 'Inversa:\n' + inversa.map(row => row.join(' ')).join('\n');
+            }
+        }
+
+        function calcularSuma() {
+            const matrix1 = getMatrix();
+            const matrix2 = getMatrixB();
+            if (matricesSonCompatibles(matrix1, matrix2)) {
+                const suma = sumarMatrices(matrix1, matrix2);
+                document.getElementById('result').innerText = 'Suma:\n' + suma.map(row => row.join(' ')).join('\n');
+            } else {
+                document.getElementById('result').innerText = 'Las matrices no son compatibles para la suma.';
+            }
+        }
+
+        function calcularResta() {
+            const matrix1 = getMatrix();
+            const matrix2 = getMatrixB();
+            if (matricesSonCompatibles(matrix1, matrix2)) {
+                const resta = restarMatrices(matrix1, matrix2);
+                document.getElementById('result').innerText = 'Resta:\n' + resta.map(row => row.join(' ')).join('\n');
+            } else {
+                document.getElementById('result').innerText = 'Las matrices no son compatibles para la resta.';
+            }
+        }
+
+        function calcularMultiplicacion() {
+            const matrix1 = getMatrix();
+            const matrix2 = getMatrixB();
+            if (matricesSonMultiplicables(matrix1, matrix2)) {
+                const multiplicacion = multiplicarMatrices(matrix1, matrix2);
+                document.getElementById('result').innerText = 'Multiplicación:\n' + multiplicacion.map(row => row.join(' ')).join('\n');
+            } else {
+                document.getElementById('result').innerText = 'Las matrices no son compatibles para la multiplicación.';
+            }
+        }
+
+        function matricesSonCompatibles(matrix1, matrix2) {
+            return matrix1.length === matrix2.length && matrix1[0].length === matrix2[0].length;
+        }
+
+        function matricesSonMultiplicables(matrix1, matrix2) {
+            return matrix1[0].length === matrix2.length;
+        }
+
+        function sumarMatrices(matrix1, matrix2) {
+            const result = [];
+            for (let i = 0; i < matrix1.length; i++) {
+                result[i] = [];
+                for (let j = 0; j < matrix1[0].length; j++) {
+                    result[i][j] = matrix1[i][j] + matrix2[i][j];
+                }
+            }
+            return result;
+        }
+
+        function restarMatrices(matrix1, matrix2) {
+            const result = [];
+            for (let i = 0; i < matrix1.length; i++) {
+                result[i] = [];
+                for (let j = 0; j < matrix1[0].length; j++) {
+                    result[i][j] = matrix1[i][j] - matrix2[i][j];
+                }
+            }
+            return result;
+        }
+
+        function multiplicarMatrices(matrix1, matrix2) {
+            const result = [];
+            for (let i = 0; i < matrix1.length; i++) {
+                result[i] = [];
+                for (let j = 0; j < matrix2[0].length; j++) {
+                    let sum = 0;
+                    for (let k = 0; k < matrix1[0].length; k++) {
+                        sum += matrix1[i][k] * matrix2[k][j];
+                    }
+                    result[i][j] = sum;
+                }
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
